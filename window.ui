@@ -26,7 +26,21 @@
       <layout class="QVBoxLayout" name="mplvl"/>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="2" column="0">
+     <widget class="QPushButton" name="folderSelect">
+      <property name="text">
+       <string>Load ZI XY Data Sets from Folder</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="renameSelectedData">
+      <property name="text">
+       <string>Rename</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
      <widget class="QListWidget" name="mplfigs">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
@@ -42,10 +56,37 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="folderSelect">
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="QEntry">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="saveFit">
       <property name="text">
-       <string>Load ZI XY Data Sets from Folder</string>
+       <string>Save Fit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="fitSelectedData">
+      <property name="text">
+       <string>Fit Selected Data</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QPushButton" name="cancelFit">
+      <property name="text">
+       <string>Cancel Fit</string>
       </property>
      </widget>
     </item>
