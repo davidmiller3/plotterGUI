@@ -86,9 +86,9 @@ class Main(QMainWindow, Ui_MainWindow):
         for i in os.listdir(folderName):
             fullpath=folderName + "\\"+ i
             for ii in os.listdir(fullpath):
-                if ii == "Data.csv":
-                    data = np.genfromtxt(fullpath+"\\Data.csv", delimiter=',')
-            xy=xyData(i, data[:,0], data[:,2])
+                if ii[-4:] == ".csv":
+                    data = np.genfromtxt(fullpath+ "\\" + ii, delimiter=',')
+            xy=xyData(i, data[:,1], data[:,2])
             self.adddata(i, xy)
     def onRenameSelectedData(self,):
         print "Not Implemented"
@@ -115,9 +115,10 @@ class Main(QMainWindow, Ui_MainWindow):
         Q = int(self.QEntry.text())
         fwhm=x0/Q
         out, params=lpf.lmLorFit(x[xi:xf],y[xi:xf],[x0,y0*fwhm/2*math.pi,fwhm])
-        self.activeDataSet.addFit(out, xi,xf, 'test')
-        self.activeDataSet.fits[-1].plotBest()
-        print 'Q = '+ str(params[3])       
+        self.activeDataSet.addFit(out, xi,xf, params)
+        fig = self.activeDataSet.fits[-1].plotBest()
+#        plt.text(2, 0.65,'Q = '+ str(params[3]), fontdict=font)
+              
         
 
     def disableForFit(self,):
