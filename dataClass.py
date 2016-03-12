@@ -33,11 +33,15 @@ class xyData():
         else:
             self.fits[index].plotBest()
     def plotAllFits(self):
-        plt.figure(1)        
-        plt.plot(self.xData, self.yData, 'bo')        
+        plt.figure(1)
+        plt.plot(self.xData, self.yData, 'bo')                
         for i in self.fits:
-            plt.plot(self.xData, i.out.best_fit)
-            plt.annotate('Q = '+ str(self.params[3]), xy=(i.params[0],i.params[1]))
+#idx is x value closes to center
+            idx=min(range(len(self.xData)), key=lambda x: abs(self.xData[x]-i.params[0]))
+            print i.params[0],i.params[1]
+            plt.plot(self.xData[i.xi:i.xf+1], i.out.best_fit)
+            plt.annotate('Q = '+ str(i.params[3]), xy=(i.params[0],self.yData[idx]), textcoords = 'data', xycoords='data')
+        plt.show()
 
 class fit():
     def __init__(self, out, xi, xf, params, name = None):

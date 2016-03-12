@@ -39,6 +39,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.addmpl(fig)
         self.activefig=None
         self.activeDataSet=None
+        self.showAllFits.clicked.connect(self.onShowAllFitsClick)
         
     def changefig(self, ):
         item=self.mplfigs.currentItem()
@@ -114,11 +115,12 @@ class Main(QMainWindow, Ui_MainWindow):
         y0 = event.ydata        
         Q = int(self.QEntry.text())
         fwhm=x0/Q
-        out, params=lpf.lmLorFit(x[xi:xf],y[xi:xf],[x0,y0*fwhm/2*math.pi,fwhm])
+        out, params=lpf.lmLorFit(x[xi:xf+1],y[xi:xf+1],[x0,y0*fwhm/2*math.pi,fwhm])
         self.activeDataSet.addFit(out, xi,xf, params)
         fig = self.activeDataSet.fits[-1].plotBest()
 #        plt.text(2, 0.65,'Q = '+ str(params[3]), fontdict=font)
-              
+    def onShowAllFitsClick(self,):
+        self.activeDataSet.plotAllFits()
         
 
     def disableForFit(self,):
