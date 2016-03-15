@@ -17,7 +17,9 @@ import math
 
 Ui_MainWindow, QMainWindow = loadUiType('window.ui')
 
-homedir="Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Lock-In Sweeps"
+#homedir="Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Lock-In Sweeps"
+#homedir=os.path.expanduser('~')
+homedir='smb://cas-fs1/Material-Science-Institute/Aleman-Lab/Group/Projects/FIBed Graphene Drumhead Resonators/Measurement Data/Lock-In Sweeps/3_12_16/12'
 class Main(QMainWindow, Ui_MainWindow):
     def __init__(self, ):
         super(Main, self).__init__()
@@ -85,10 +87,10 @@ class Main(QMainWindow, Ui_MainWindow):
         folderName=self.fileDialog.getExistingDirectory(self,
         "Choose a folder", homedir, QtGui.QFileDialog.ShowDirsOnly)
         for i in os.listdir(folderName):
-            fullpath=folderName + "\\"+ i
+            fullpath=os.path.join(folderName,i)
             for ii in os.listdir(fullpath):
                 if ii[-4:] == ".csv":
-                    data = np.genfromtxt(fullpath+ "\\" + ii, delimiter=',')
+                    data = np.genfromtxt(os.path.join(fullpath,ii), delimiter=',')
             xy=xyData(i, data[:,1], data[:,2])
             self.adddata(i, xy)
     def onRenameSelectedData(self,):

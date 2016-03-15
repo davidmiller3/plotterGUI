@@ -40,7 +40,7 @@ class xyData():
             idx=min(range(len(self.xData)), key=lambda x: abs(self.xData[x]-i.params[0]))
             print i.params[0],i.params[1]
             plt.plot(self.xData[i.xi:i.xf+1], i.out.best_fit)
-            plt.annotate('Q = '+ str(i.params[3]), xy=(i.params[0],self.yData[idx]), textcoords = 'data', xycoords='data')
+            plt.annotate('Q = '+ str(i.params[3]) + '\n' + 'w_0 = '+ str(i.params[0]), xy=(i.params[0],self.yData[idx]), textcoords = 'data', xycoords='data')
         plt.show()
 
 class fit():
