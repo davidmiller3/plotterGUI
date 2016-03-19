@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>957</width>
-    <height>725</height>
+    <width>1004</width>
+    <height>829</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QWidget" name="mplwindow" native="true">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -26,37 +26,39 @@
       <layout class="QVBoxLayout" name="mplvl"/>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="folderSelect">
-      <property name="text">
-       <string>Load ZI XY Data Sets from Folder</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QPushButton" name="renameSelectedData">
-      <property name="text">
-       <string>Rename</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QListWidget" name="mplfigs">
+    <item row="6" column="2">
+     <widget class="QPushButton" name="cancelFit">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="maximumSize">
+      <property name="minimumSize">
        <size>
-        <width>200</width>
-        <height>16777215</height>
+        <width>100</width>
+        <height>0</height>
        </size>
+      </property>
+      <property name="text">
+       <string>Cancel Fit</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="7" column="3">
+     <widget class="QLabel" name="QLabel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Expected Q</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
      <widget class="QLineEdit" name="QEntry">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -69,42 +71,299 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="6" column="3">
      <widget class="QPushButton" name="saveFit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>Save Fit</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="8" column="2">
      <widget class="QPushButton" name="fitSelectedData">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>Fit Selected Data</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QPushButton" name="cancelFit">
-      <property name="text">
-       <string>Cancel Fit</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QListWidget" name="listWidget">
+    <item row="0" column="2" colspan="2">
+     <widget class="QGroupBox" name="groupBox_2">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QPushButton" name="showAllFits">
-      <property name="text">
-       <string>Plot All Fits</string>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
       </property>
+      <property name="title">
+       <string>GroupBox</string>
+      </property>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>-10</x>
+         <y>20</y>
+         <width>291</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>GroupBox</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>19</x>
+          <y>0</y>
+          <width>251</width>
+          <height>128</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="3" column="0">
+            <widget class="QSpinBox" name="rowEdit"/>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="deviceTypeLabel">
+             <property name="text">
+              <string>Device Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="rowLabel">
+             <property name="text">
+              <string>Sample Row</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QSpinBox" name="columnEdit"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="columnLabel">
+             <property name="text">
+              <string>Sample Column</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="widthLabel">
+             <property name="text">
+              <string>Sample Width</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLineEdit" name="widthEdit">
+             <property name="text">
+              <string>Sample Width</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="chipLabel">
+             <property name="text">
+              <string>Chip Label</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QComboBox" name="deviceType">
+             <item>
+              <property name="text">
+               <string>Cross</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Drumhead</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Beam</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>H</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Other</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLineEdit" name="chipEdit">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <zorder>mplfigs</zorder>
+       <zorder>verticalLayoutWidget</zorder>
+      </widget>
+      <widget class="QGroupBox" name="fitBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>150</y>
+         <width>211</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>GroupBox</string>
+       </property>
+       <widget class="QWidget" name="gridLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>201</width>
+          <height>210</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="2" column="0">
+          <widget class="QSpinBox" name="fNumber"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="fLabel">
+           <property name="text">
+            <string>f number</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="selectBadFit">
+           <property name="text">
+            <string>Bad Fit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Mode Type</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QComboBox" name="degeneracySelect">
+           <item>
+            <property name="text">
+             <string>Degenerate</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>f_lower</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>f_higher</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="noteLabel">
+           <property name="text">
+            <string>Notes</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLineEdit" name="fitNotes"/>
+         </item>
+        </layout>
+       </widget>
+       <zorder>gridLayoutWidget_2</zorder>
+       <zorder>selectBadFit</zorder>
+      </widget>
+      <widget class="QListWidget" name="mplfigs">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>390</y>
+         <width>200</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="folderSelect">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>620</y>
+         <width>181</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Load ZI XY Data Sets from Folder</string>
+       </property>
+      </widget>
+      <zorder>groupBox</zorder>
+      <zorder>fitBox</zorder>
+      <zorder>mplfigs</zorder>
+      <zorder>folderSelect</zorder>
+      <zorder>fitSelectedData</zorder>
      </widget>
     </item>
    </layout>
@@ -114,7 +373,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>957</width>
+     <width>1004</width>
      <height>21</height>
     </rect>
    </property>

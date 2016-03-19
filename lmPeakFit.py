@@ -12,7 +12,7 @@ import math
 """Fits a dataset with a sum of lorentzians with a linear background. Params is a list of the form [ctr1,amp1,sig1,ctr2,...]. ctr_range, amp_range, sig_range
 set how much the peak parameters may vary. For this fitting function to be effective, all peaks including double peaks should be found. Including small false
 peaks should be okay as long as they are filtered later. Returns a ModelResult class with fitted parameters"""
-def lmLorFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 3):
+def lmLorFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6):
     x = xdata
     y = ydata
     line_mod = LinearModel(prefix='line_')
