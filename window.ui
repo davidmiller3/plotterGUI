@@ -58,16 +58,16 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="2">
-     <widget class="QLineEdit" name="QEntry">
+    <item row="9" column="2">
+     <widget class="QPushButton" name="fitSelectedData">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhNone</set>
+      <property name="text">
+       <string>Fit Selected Data</string>
       </property>
      </widget>
     </item>
@@ -84,16 +84,16 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="2">
-     <widget class="QPushButton" name="fitSelectedData">
+    <item row="7" column="2">
+     <widget class="QLineEdit" name="QEntry">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text">
-       <string>Fit Selected Data</string>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
       </property>
      </widget>
     </item>
@@ -346,24 +346,17 @@
         </size>
        </property>
       </widget>
-      <widget class="QPushButton" name="folderSelect">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>620</y>
-         <width>181</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Load ZI XY Data Sets from Folder</string>
-       </property>
-      </widget>
       <zorder>groupBox</zorder>
       <zorder>fitBox</zorder>
       <zorder>mplfigs</zorder>
-      <zorder>folderSelect</zorder>
       <zorder>fitSelectedData</zorder>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QPushButton" name="folderSelect">
+      <property name="text">
+       <string>Load ZI XY Data Sets from Folder</string>
+      </property>
      </widget>
     </item>
    </layout>
