@@ -42,6 +42,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.activeDataSet=None
         self.fittingWindow = None
         self.df=pd.DataFrame()
+        self.testdf=pd.DataFrame()
 
     
     def onSelectFolder(self,):
@@ -170,14 +171,19 @@ class Main(QMainWindow, Ui_MainWindow):
         Q=self.activeFitParams[3]
         self.saveFit.setEnabled(False)
         self.cancelFit.setEnabled(False)
-        df = pd.DataFrame({'Run Name' : self.mplfigs.currentItem().text(), 'Device Name' : self.chipEdit.text(), 'Row Number' : 
-            self.rowEdit.value(), 'Column Number' : self.columnEdit.value(),
-            'Device Type' : self.deviceType.currentText(), 'Device Width' : 
-                self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), 
-'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : w0, 'Amplitude' : A, 
-'Q' : Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text()}, index=[self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()])
-        self.df = self.df.combine_first(df)    
-        print self.df
+        curridx=self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()        
+        if curridx not in loadeddf.index:
+        
+            df = pd.DataFrame({'Run Name' : self.mplfigs.currentItem().text(), 'Device Name' : self.chipEdit.text(), 'Row Number' : \
+            self.rowEdit.value(), 'Column Number' : self.columnEdit.value(),\
+            'Device Type' : self.deviceType.currentText(), 'Device Width' : \
+                self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
+                'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : w0, 'Amplitude' : A, \
+                'Q' : Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text()}, index=[curridx])
+            print self.testdf        
+        
+        else:
+            print 'repeated fit'
         self.enableAfterFit()
     def onCancelFit(self,):
         self.saveFit.setEnabled(False)
