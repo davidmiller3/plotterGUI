@@ -18,8 +18,8 @@ import math
 Ui_MainWindow, QMainWindow = loadUiType('window.ui')
 Ui_MainFittingWindow, QMainFittingWindow = loadUiType('fittingwindow.ui')
 #homedir="Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Lock-In Sweeps"
-#homedir=os.path.expanduser('~')
-homedir='Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Lock-In Sweeps\2016\03\15'
+homedir=os.path.expanduser('~')
+#homedir='Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Lock-In Sweeps\2016\03\15'
 class Main(QMainWindow, Ui_MainWindow):
     def __init__(self, ):
         super(Main, self).__init__()
@@ -122,6 +122,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.disableForFit()
     
     def fitClick(self, event):
+        self.cancelFit.setEnabled(True)
         print 'clicked'
         self.activefig.canvas.mpl_disconnect(self.cid)
         xi,xf = self.activeDataSet.fig.gca().get_xlim()
@@ -130,10 +131,10 @@ class Main(QMainWindow, Ui_MainWindow):
 # General to this point, actual fit can vary below        
         x0 = event.xdata
         y0 = event.ydata        
-        Q = int(self.QEntry.text())
-        fwhm=x0/Q
-        print xi,xf, [x0,y0,fwhm]
-        ip=[x0,y0,fwhm]
+        Q = float(self.QEntry.text())
+        sigma=1/(2*Q)
+        print xi,xf, [x0,y0,sigma]
+        ip=[x0,y0,sigma]
         print self.activeDataSet
         out, params = self.activeDataSet.fitDataSelection(xi,xf,ip)
         self.fitfig=Figure()
@@ -146,7 +147,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.addmpl(self.fitfig)
         self.activeFitParams = params
         self.saveFit.setEnabled(True)
-        self.cancelFit.setEnabled(True)
+
 #        plt.text(2, 0.65,'Q = '+ str(params[3]), fontdict=font)
 
     def disableForFit(self,):
@@ -172,7 +173,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.saveFit.setEnabled(False)
         self.cancelFit.setEnabled(False)
         curridx=self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()        
-        if curridx not in loadeddf.index:
+        if curridx not in self.testdf.index:
         
             df = pd.DataFrame({'Run Name' : self.mplfigs.currentItem().text(), 'Device Name' : self.chipEdit.text(), 'Row Number' : \
             self.rowEdit.value(), 'Column Number' : self.columnEdit.value(),\

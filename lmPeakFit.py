@@ -1,5 +1,5 @@
 import numpy as np
-from lmfit.models import GaussianModel, ExponentialModel, LorentzianModel, LinearModel
+from lmfit.models import GaussianModel, ExponentialModel, LorentzianModel, LinearModel, DampedOscillatorModel
 import peak_Detect as pd
 import matplotlib.pyplot as plt
 from scipy import signal
@@ -16,37 +16,36 @@ def lmLorFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6
     x = xdata
     y = ydata
     line_mod = LinearModel(prefix='line_')
-    lorentz_mod = LorentzianModel(prefix='lor_')
+    lorentz_mod = DampedOscillatorModel(prefix='lor_')
     pars =  line_mod.make_params(intercept=0, slope=0)
+    pars['line_intercept'].set(0, vary=True)
+    pars['line_slope'].set(0, vary=True)
 
     peaks=[]
     for i in range(0, len(params)/3):
-        peaks.append(LorentzianModel(prefix='lo'+str(i)+'_'))
+        peaks.append(DampedOscillatorModel(prefix='lo'+str(i)+'_'))
         pars.update(peaks[i].make_params())
         ctr=params[3*i]
         amp=params[3*i+1]
-        sig=params[3*i+2]/2
+        sig=params[3*i+2]
+        print sig
         pars['lo'+str(i)+'_center'].set(ctr, min=ctr/ctr_range, max=ctr*ctr_range)
         pars['lo'+str(i)+'_amplitude'].set(amp,min=amp/amp_range, max=amp*amp_range)
-        pars['lo'+str(i)+'_sigma'].set(sig,min=sig/sig_range, max=sig*sig_range)
+        pars['lo'+str(i)+'_sigma'].set(sig, min=sig/sig_range, max=sig*sig_range)
 
     mod=line_mod
     for i in xrange(len(peaks)):
         mod=mod+peaks[i]
 
     init = mod.eval(pars, x=x)
-    out=mod.fit(y,pars,x=x)
-    """plt.plot(x,y)
-    plt.plot(x, init, 'k--')
-    plt.plot(x, out.best_fit, 'r-')
-    plt.show()"""
-    fittedfwhm = out.params['lo0_fwhm'].value
+    out=mod.fit(y, pars,x=x, weights=np.sqrt(y))
+    fittedsigma = out.params['lo0_sigma'].value
     fittedAmp = out.params['lo0_amplitude'].value
     fittedCenter = out.params['lo0_center'].value
-    fittedQ=fittedCenter/fittedfwhm
+    fittedQ=1/(2*fittedsigma)
 
     """Returns output fit as will as list of important fitting parameters"""
-    return out, [fittedCenter, fittedAmp, fittedfwhm, fittedQ]
+    return out, [fittedCenter, fittedAmp, fittedsigma, fittedQ]
 
 def fitSingleLorentzian(data, expectedQ, lookahead, delta, backgroundData = None, svgWindowLength = 11, svgOrder= 5):
     """Fits a data to a single lorentzian plus a linear background. The expected Q
@@ -94,7 +93,7 @@ def fitSingleLorentzian(data, expectedQ, lookahead, delta, backgroundData = None
     if limitToBigPeak == True:
         max_value = max(rm)
         max_index = rm.index(max_value)
-        paramList=[fm[max_index], rm[max_index]*fwhm/2*math.pi, fwhm]
+        paramList=[fm[max_index], rm[max_index]*fwhm, fwhm]
     else:
         for i in xrange(len(fmi)):
             paramList+=[fm[i], rm[i]*fwhm/2*math.pi, fwhm]

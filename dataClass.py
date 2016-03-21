@@ -38,8 +38,8 @@ class xyData():
     def fitDataSelection(self, xi, xf, ip):
         x0=ip[0]
         y0=ip[1]
-        fwhm=ip[2]
-        out, params=lpf.lmLorFit(self.data['f'][xi:xf+1],self.data['r'][xi:xf+1],[x0,y0*fwhm/2*math.pi,fwhm])        
+        sigma=ip[2]
+        out, params=lpf.lmLorFit(self.data['f'][xi:xf+1],self.data['r'][xi:xf+1],[x0,2*sigma*y0,sigma])               
         return out, params
     def storeLorFit(self, out, xi, xf, params, omega):
 #Stores a lorentzian fit in a dictionary of fitted values. out is the fit, xi
