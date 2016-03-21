@@ -181,10 +181,12 @@ class Main(QMainWindow, Ui_MainWindow):
                 self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
                 'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : w0, 'Amplitude' : A, \
                 'Q' : Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text()}, index=[curridx])
+            self.testdf=self.testdf.append(df)
             print self.testdf        
-        
+            
         else:
             print 'repeated fit'
+        
         self.enableAfterFit()
     def onCancelFit(self,):
         self.saveFit.setEnabled(False)
