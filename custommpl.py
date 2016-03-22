@@ -175,7 +175,13 @@ class Main(QMainWindow, Ui_MainWindow):
         curridx=self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()        
         if curridx not in self.testdf.index:
         
-            df = pd.DataFrame(x 
+            df = pd.DataFrame({'Run Name' : self.mplfigs.currentItem().text(), 'Device Name' : self.chipEdit.text(), 'Row Number' : \
+            self.rowEdit.value(), 'Column Number' : self.columnEdit.value(),\
+            'Device Type' : self.deviceType.currentText(), 'Device Width' : \
+                self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
+                'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : w0, 'Amplitude' : A, \
+                'Q' : Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text()}, index=[curridx])
+            self.testdf=self.testdf.append(df)
             print self.testdf        
             
         else:
