@@ -12,38 +12,45 @@ import math
 """Fits a dataset with a sum of lorentzians with a linear background. Params is a list of the form [ctr1,amp1,sig1,ctr2,...]. ctr_range, amp_range, sig_range
 set how much the peak parameters may vary. For this fitting function to be effective, all peaks including double peaks should be found. Including small false
 peaks should be okay as long as they are filtered later. Returns a ModelResult class with fitted parameters"""
-def lmLorFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6):
+def lmDDOFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6, weightexponential = 0):    
+    
+    
     x = xdata
     y = ydata
+#Define a linear model and a Damped Oscillator Model    
     line_mod = LinearModel(prefix='line_')
-    lorentz_mod = DampedOscillatorModel(prefix='lor_')
+    ddo_mod = DampedOscillatorModel(prefix='ddo_')
+#Initial Pars for Linear Model
     pars =  line_mod.make_params(intercept=0, slope=0)
     pars['line_intercept'].set(0, vary=True)
     pars['line_slope'].set(0, vary=True)
-
+#Extend param list to use multiple peaks. Currently unused.
     peaks=[]
+#Add fit parameters, Center, Amplitude, and Sigma
     for i in range(0, len(params)/3):
-        peaks.append(DampedOscillatorModel(prefix='lo'+str(i)+'_'))
+        peaks.append(DampedOscillatorModel(prefix='ddo'+str(i)+'_'))
         pars.update(peaks[i].make_params())
         ctr=params[3*i]
         amp=params[3*i+1]
         sig=params[3*i+2]
-        print sig
-        pars['lo'+str(i)+'_center'].set(ctr, min=ctr/ctr_range, max=ctr*ctr_range)
-        pars['lo'+str(i)+'_amplitude'].set(amp,min=amp/amp_range, max=amp*amp_range)
-        pars['lo'+str(i)+'_sigma'].set(sig, min=sig/sig_range, max=sig*sig_range)
-
+        pars['ddo'+str(i)+'_center'].set(ctr, min=ctr/ctr_range, max=ctr*ctr_range)
+        pars['ddo'+str(i)+'_amplitude'].set(amp,min=amp/amp_range, max=amp*amp_range)
+        pars['ddo'+str(i)+'_sigma'].set(sig, min=sig/sig_range, max=sig*sig_range)
+#Create full model. Add linear model and all peaks
     mod=line_mod
     for i in xrange(len(peaks)):
         mod=mod+peaks[i]
-
+#Initialize fit
     init = mod.eval(pars, x=x)
-    out=mod.fit(y, pars,x=x, weights=np.sqrt(y))
-    fittedsigma = out.params['lo0_sigma'].value
-    fittedAmp = out.params['lo0_amplitude'].value
-    fittedCenter = out.params['lo0_center'].value
+#Do the fit. The weight exponential can weight the points porportional to the
+#amplitude of y point. In this way, points on peak can be given more weight.     
+    out=mod.fit(y, pars,x=x, weights=y**weightexponential)
+#Get the fit parameters
+    fittedsigma = out.params['ddo0_sigma'].value
+    fittedAmp = out.params['ddo0_amplitude'].value
+    fittedCenter = out.params['ddo0_center'].value
     fittedQ=1/(2*fittedsigma)
-
+#Returns the output fit as well as an array of the fit parameters
     """Returns output fit as will as list of important fitting parameters"""
     return out, [fittedCenter, fittedAmp, fittedsigma, fittedQ]
 
