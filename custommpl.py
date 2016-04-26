@@ -32,10 +32,14 @@ class Main(QMainWindow, Ui_MainWindow):
         self.cancelFit.clicked.connect(self.onCancelFit)
         self.fitSelectedData.clicked.connect(self.onFit)
         self.fitSelectedData.setEnabled(False)
+        self.selectPandasDB.clicked.connect(self.onSelectPandasDB)
         self.QEntry.setValidator(QtGui.QIntValidator(1,1000000)) 
         self.widthEdit.setValidator(QtGui.QIntValidator(1,10000))
         self.widthEdit.setText(str(0))
+        self.widthEdit.setText(str(0))
         self.QEntry.setText(str(100))
+        self.fNumber.setValue(1)
+        self.degeneracySelect.setCurrentIndex(0)
         fig = Figure()
         self.addmpl(fig)
         self.activefig=None
@@ -43,8 +47,17 @@ class Main(QMainWindow, Ui_MainWindow):
         self.fittingWindow = None
         self.df=pd.DataFrame()
         self.testdf=pd.DataFrame()
-
     
+    def onSelectPandasDB(self,):
+        """Select a folder, the selected folder will be parsed for sub-folders.
+        Each of these subfolders will be turned into a xyData class which is 
+        then stored in main with the adddata command"""
+        fileDialog=QtGui.QFileDialog(self)
+        fileName=fileDialog.getSaveFileName(self,
+        "Choose a pandasDB", homedir, filter ="csv (*.csv)")
+        self.pathtopandas=fileName
+        self.chipEdit.setText(self.pathtopandas)
+        print self.pathtopandas
     def onSelectFolder(self,):
         """Select a folder, the selected folder will be parsed for sub-folders.
         Each of these subfolders will be turned into a xyData class which is 
@@ -137,6 +150,8 @@ class Main(QMainWindow, Ui_MainWindow):
         ip=[x0,y0,sigma]
         print self.activeDataSet
         out, params = self.activeDataSet.fitDataSelection(xi,xf,ip)
+        self.outfit=out
+        self.currpars=params
         self.fitfig=Figure()
         ax=self.fitfig.add_subplot(1,1,1)
         ax.plot(self.activeDataSet.data.f[xi:xf+1], out.best_fit)
@@ -167,31 +182,35 @@ class Main(QMainWindow, Ui_MainWindow):
         self.addmpl(self.activefig)
         self.cid =self.activefig.canvas.mpl_connect('button_press_event', self.onclick)
     def onSaveFit(self,):
-        w0=self.activeFitParams[0]
-        A=self.activeFitParams[1]
-        Q=self.activeFitParams[3]
+        self.w0=self.activeFitParams[0]
+        self.A=self.activeFitParams[1]
+        self.Q=self.activeFitParams[3]
         self.saveFit.setEnabled(False)
         self.cancelFit.setEnabled(False)
         curridx=self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()        
-        try: 
-            master=pd.read_csv(os.path.join(self.pathtopandas,self.chipEdit.text()+'.csv')
-        except ValueError:
-            pass
-        if curridx not in self.testdf.index:
-            newrow=self.prepareDFRow(curridx)
-            master=master.append(newrow)
-            pd.DataFrame.to_csv(master)    
-        else:
-            print 'repeated fit'
-        
+        newrow=self.prepareDFRow(curridx)
+        try:        
+            master=pd.read_csv(self.pathtopandas, index_col=0)
+            if curridx not in self.testdf.index:
+                newmaster=master.append(newrow)
+                print newmaster                
+                newmaster.to_csv(self.pathtopandas[:-4]+'temp.csv')
+                os.remove(self.pathtopandas)
+                os.rename(self.pathtopandas[:-4]+'temp.csv',self.pathtopandas)
+                
+            else:
+                print 'repeated fit'
+        except IOError:
+            newrow.to_csv(self.pathtopandas)
         self.enableAfterFit()
     def prepareDFRow(self, idx):
         df = pd.DataFrame({'Run Name' : self.mplfigs.currentItem().text(), 'Device Name' : self.chipEdit.text(), 'Row Number' : \
             self.rowEdit.value(), 'Column Number' : self.columnEdit.value(),\
             'Device Type' : self.deviceType.currentText(), 'Device Width' : \
                 self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
-                'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : w0, 'Amplitude' : A, \
-                'Q' : Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date}, index=[idx])
+                'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : self.w0, 'Amplitude' : self.A, \
+                'Q' : self.Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date}, index=[idx])
+        print df
         return df
     def onCancelFit(self,):
         self.saveFit.setEnabled(False)

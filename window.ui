@@ -97,6 +97,13 @@
       </property>
      </widget>
     </item>
+    <item row="10" column="0">
+     <widget class="QPushButton" name="folderSelect">
+      <property name="text">
+       <string>Load ZI XY Data Sets from Folder</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="2" colspan="2">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="sizePolicy">
@@ -352,10 +359,10 @@
       <zorder>fitSelectedData</zorder>
      </widget>
     </item>
-    <item row="10" column="0">
-     <widget class="QPushButton" name="folderSelect">
+    <item row="10" column="2">
+     <widget class="QPushButton" name="selectPandasDB">
       <property name="text">
-       <string>Load ZI XY Data Sets from Folder</string>
+       <string>PushButton</string>
       </property>
      </widget>
     </item>
