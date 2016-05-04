@@ -1,9 +1,10 @@
 import numpy as np
-from lmfit.models import GaussianModel, ExponentialModel, LorentzianModel, LinearModel, DampedOscillatorModel
+from lmfit.models import GaussianModel, ExpressionModel, ExponentialModel, LorentzianModel, LinearModel, DampedOscillatorModel
 import peak_Detect as pd
 import matplotlib.pyplot as plt
 from scipy import signal
 import math
+from lmfit import CompositeModel, Model
 
 
 
@@ -53,6 +54,48 @@ def lmDDOFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6
 #Returns the output fit as well as an array of the fit parameters
     """Returns output fit as will as list of important fitting parameters"""
     return out, [fittedCenter, fittedAmp, fittedsigma, fittedQ]
+
+def jump(x, mid):
+    "heaviside step function"
+    o = np.zeros(len(x))
+    imid = max(np.where(x<=mid)[0])
+    o[imid:] = - 2*np.pi
+    return o
+    
+def phase(x, off, m, f0, Q):
+    list0=np.zeros(len(x)) 
+    imid = max(np.where(x<=f0)[0])
+    list0[imid:] = - 2*np.pi
+    o=off + m*x- np.arctan(1/Q * 1/(f0/x - x/f0))+list0
+    return o
+    
+def lmDDOPhaseFit(xdata, ydata, params, f0_range = 1.2, Q_range = 3):    
+    f0= params[0]
+    Q=1/(2*params[2])
+    
+    x = xdata
+    y = ydata
+#Define a linear model and a Damped Oscillator Model    
+#    ddophase_mod = ExpressionModel('off + m*x- arctan(1/Q * 1/(f0/x - x/f0))-')
+    ddophase_mod = Model(phase)
+#Initial Pars for Linear Model
+    pars =  ddophase_mod.make_params(off=0, m=0, f0=f0, Q=Q)
+
+#Add fit parameters, Center, Amplitude, and Sigma
+    pars['f0'].set(min=f0/f0_range, max=f0*f0_range)
+    pars['Q'].set(min=Q/Q_range, max=Q*Q_range)
+#Create full model. Add linear model and all peaks
+#Initialize fit
+    init = ddophase_mod.eval(pars, x=x)
+#Do the fit. The weight exponential can weight the points porportional to the
+#amplitude of y point. In this way, points on peak can be given more weight.     
+    out=ddophase_mod.fit(y, pars,x=x)
+#Get the fit parameters
+    fittedf0= out.params['f0'].value
+    fittedQ = out.params['Q'].value
+#Returns the output fit as well as an array of the fit parameters
+    """Returns output fit as will as list of important fitting parameters"""
+    return out, [fittedf0, np.nan, np.nan, fittedQ]
 
 def fitSingleLorentzian(data, expectedQ, lookahead, delta, backgroundData = None, svgWindowLength = 11, svgOrder= 5):
     """Fits a data to a single lorentzian plus a linear background. The expected Q
