@@ -22,18 +22,22 @@ class xyData():
 #(Time, Frequency, R amplitude, Phase)
                 self.data = pd.read_csv((os.path.join(self.path,i)), names=['t','f', 'r', 'th']) 
             if i[-4:] == ".txt":
-                self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=5, header =  None)
-        self.deviceType = self.info.loc[0,1]
-        self.deviceRow = self.info.loc[1,1]
-        self.deviceCol = self.info.loc[2,1]
-        self.deviceWid = self.info.loc[3,1]
-        self.date = self.info.loc[4,1]
+                self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=7, header =  None)
+        self.laserPowerType = self.info.loc[0,1]   
+        self.laserPower = self.info.loc[1,1]
+        self.deviceType = self.info.loc[2,1]
+        self.deviceRow = self.info.loc[3,1]
+        self.deviceCol = self.info.loc[4,1]
+        self.deviceWid = self.info.loc[5,1]
+        self.date = self.info.loc[6,1]
 #        self.imagePath = os.path.join("Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Images\Device_Images", self.deviceRow +'_'+ self.deviceCol)
         self.fits={}
         self.fig=Figure()
 #Create a MPL plot to show in fitting window. self.fig is the plot
         ax=self.fig.add_subplot(1,1,1)
-        ax.plot(self.data.f, self.data.r)
+        axt=ax.twinx()
+        ax.plot(self.data.f, self.data.th)
+        axt.plot(self.data.f, self.data.r, 'g')
     def plotData(self,):
         fig = Figure()
         ax1f1 = fig.add_subplot(111)
