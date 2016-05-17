@@ -50,10 +50,12 @@ def lmDDOFit(xdata, ydata, params, ctr_range = 1.2, amp_range = 3 , sig_range= 6
     fittedsigma = out.params['ddo0_sigma'].value
     fittedAmp = out.params['ddo0_amplitude'].value
     fittedCenter = out.params['ddo0_center'].value
+    fittedIntercept = out.params['line_intercept'].value
+    fittedSlope = out.params['line_slope'].value
     fittedQ=1/(2*fittedsigma)
 #Returns the output fit as well as an array of the fit parameters
     """Returns output fit as will as list of important fitting parameters"""
-    return out, [fittedCenter, fittedAmp, fittedsigma, fittedQ]
+    return out, [fittedCenter, fittedAmp, fittedsigma, fittedQ, fittedIntercept, fittedSlope]
 
 def jump(x, mid):
     "heaviside step function"
