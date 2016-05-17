@@ -197,6 +197,8 @@ class Main(QMainWindow, Ui_MainWindow):
         self.w0=self.activeFitParams[0]
         self.A=self.activeFitParams[1]
         self.Q=self.activeFitParams[3]
+        self.lineInt=self.activeFitParams[4]
+        self.lineSlope=self.activeFitParams[5]
         self.saveFit.setEnabled(False)
         self.cancelFit.setEnabled(False)
         curridx=self.mplfigs.currentItem().text()+'_'+str(self.fNumber.value())+'_' + self.degeneracySelect.currentText()        
@@ -222,7 +224,7 @@ class Main(QMainWindow, Ui_MainWindow):
                 self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
                 'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : self.w0, 'Amplitude' : self.A, \
                 'Q' : self.Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Power Measurement Type' : self.powerType.text(), 'Power (uW)' : self.powerValue.text(),\
-                'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date}, index=[idx])
+                'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date, 'Intercept': self.lineInt, 'Slope':self.lineSlope}, index=[idx] )
         print df
         return df
     def onCancelFit(self,):
