@@ -11,6 +11,7 @@ import pandas as pd
 import math
 import os
 import lmPeakFit as lpf
+import lmfit
 class xyData():
     def __init__(self, pathToDataFolder):
 #Path to data
@@ -20,7 +21,7 @@ class xyData():
             if i[-4:] == ".csv":
 #Read data file. Names columns based on ZI Lock in sweep labview in output 
 #(Time, Frequency, R amplitude, Phase)
-                self.data = pd.read_csv((os.path.join(self.path,i)), names=['t','f', 'r', 'th']) 
+                self.data = pd.read_csv((os.path.join(self.path,i)), names=['t','f', 'r', 'th','t2','f2', 'r2', 'th2','t3','f3', 'r3', 'th3']) 
             if i[-4:] == ".txt":
                 self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=7, header =  None)
         self.laserPowerType = self.info.loc[0,1]   
@@ -36,8 +37,8 @@ class xyData():
 #Create a MPL plot to show in fitting window. self.fig is the plot
         ax=self.fig.add_subplot(1,1,1)
         axt=ax.twinx()
-        ax.plot(self.data.f, self.data.th)
-        axt.plot(self.data.f, self.data.r, 'g')
+        ax.plot(self.data.f, self.data.th, 'bo')
+        axt.plot(self.data.f, self.data.r, 'go')
     def plotData(self,):
         fig = Figure()
         ax1f1 = fig.add_subplot(111)
@@ -50,7 +51,9 @@ class xyData():
         y0=ip[1]
         sigma=ip[2]
         out, params=lpf.lmDDOFit(self.data['f'][xi:xf+1],self.data['r'][xi:xf+1],[x0,2*sigma*y0,sigma])               
+        print lmfit.report_fit(out)     
         return out, params
+
     def storeLorFit(self, out, xi, xf, params, omega):
 #Stores a lorentzian fit in a dictionary of fitted values. out is the fit, xi
 #and xf are initial and final values, params if the output fit params, and Omega

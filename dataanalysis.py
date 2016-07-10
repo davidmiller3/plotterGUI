@@ -86,7 +86,8 @@ def plotboth(data):
     ax.set_ylabel('Quality Factor', **labelfont)
 #    plt.legend()
     fig.tight_layout()
-    fig.savefig('Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Plots\Test.pdf', format='pdf')
+    plt.show()
+#    fig.savefig('Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Measurement Data\Plots\Test.pdf', format='pdf')
 """    ax.tick_params(axis='x',          # changes apply to the x-axis
     which='both',      # both major and minor ticks are affected
     bottom='on',      # ticks along the bottom edge are off
