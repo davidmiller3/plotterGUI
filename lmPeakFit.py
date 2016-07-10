@@ -8,7 +8,9 @@ from lmfit import CompositeModel, Model
 
 
 
-
+def DDOphase(x, w0, Q, m , b):
+    y= (-np.arctan2(w0 * x/Q,w0**2-x**2))*180/np.pi+m*x+b
+    return y
 
 """Fits a dataset with a sum of lorentzians with a linear background. Params is a list of the form [ctr1,amp1,sig1,ctr2,...]. ctr_range, amp_range, sig_range
 set how much the peak parameters may vary. For this fitting function to be effective, all peaks including double peaks should be found. Including small false

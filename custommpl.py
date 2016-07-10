@@ -138,7 +138,7 @@ class Main(QMainWindow, Ui_MainWindow):
     
 #Clcik on active MPL window    
     def onclick(self, event):
-        print 'button=%d, x=%d, y=%d, xdata=%f, ydata=%f'%(event.button, event.x, event.y, event.xdata, event.ydata)
+#        print 'button=%d, x=%d, y=%d, xdata=%f, ydata=%f'%(event.button, event.x, event.y, event.xdata, event.ydata)
         print self.activeDataSet.find_nearestx(event.xdata)
 #gca can get limits of zoomed widow
     def onFit(self,):
