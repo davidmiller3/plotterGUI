@@ -6,7 +6,9 @@ from scipy import signal
 import math
 from lmfit import CompositeModel, Model
 
-
+def find_nearestx(x, value):
+    idx = (np.abs(x-value)).argmin()
+    return idx, x[idx]
 
 def DDOphase(x, w0, Q, m , b):
     y= (-np.arctan2(w0 * x/Q,w0**2-x**2))*180/np.pi+m*x+b
@@ -163,3 +165,41 @@ def fitSingleLorentzian(data, expectedQ, lookahead, delta, backgroundData = None
 
     """Returns output fit as will as list of important fitting parameters"""
     return out, [fittedCenter, fittedAmp, fittedfwhm, fittedQ]
+
+def DDOphase(x, w0, Q, m , b):
+    y= (-np.arctan2(w0 * x/Q,w0**2-x**2))*180/np.pi+m*x+b
+    return y
+    
+def fitPhaseFromAmp(theta,f, w0,Q):
+    phase=theta
+    phase = fixPhase(phase)
+    FWHM=w0/Q
+    w0idx, w0=find_nearestx(f, w0)
+    maxval,wmax=find_nearestx(f, w0+3*FWHM)
+    minval,wmin=find_nearestx(f, w0-3*FWHM)
+    fixedphase=(phase-phase[w0idx])*180/np.pi
+    gmod = Model(DDOphase)
+    result = gmod.fit(fixedphase[minval:maxval], x=f[minval:maxval], w0=w0, \
+                  Q=Q, m =0, b=0)
+#    plt.plot(data.f[minval:maxval], result.init_fit, 'r-')
+#    plt.plot(data.f[minval:maxval], result.best_fit, 'b-')
+#    plt.plot(data.f[minval:maxval], fixedphase[minval:maxval], 'g')
+    Q = result.params['Q'].value
+    w0 = result.params['w0'].value
+    m = result.params['m'].value
+    b = result.params['b'].value   
+    fout = f[minval:maxval]   
+    pout = fixedphase[minval:maxval]       
+    return result, [w0, Q, m,b], [fout, pout]
+    
+def fixPhase(Th):
+    for i in xrange(len(Th)-1):
+        if Th[i+1]-Th[i]>3:
+            for ii in xrange(len(Th)):
+                if ii>i:
+                    Th[ii]=Th[ii]-2*np.pi
+        if Th[i+1]-Th[i]<-3:
+            for ii in xrange(len(Th)):
+                if ii>i:
+                    Th[ii]=Th[ii]+2*np.pi
+    return Th

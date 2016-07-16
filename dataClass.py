@@ -22,15 +22,28 @@ class xyData():
 #Read data file. Names columns based on ZI Lock in sweep labview in output 
 #(Time, Frequency, R amplitude, Phase)
                 self.data = pd.read_csv((os.path.join(self.path,i)), names=['t','f', 'r', 'th','t2','f2', 'r2', 'th2','t3','f3', 'r3', 'th3']) 
+#                self.data =  np.invert(np.isnan(self.data['f']))
             if i[-4:] == ".txt":
-                self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=7, header =  None)
-        self.laserPowerType = self.info.loc[0,1]   
-        self.laserPower = self.info.loc[1,1]
-        self.deviceType = self.info.loc[2,1]
-        self.deviceRow = self.info.loc[3,1]
-        self.deviceCol = self.info.loc[4,1]
-        self.deviceWid = self.info.loc[5,1]
-        self.date = self.info.loc[6,1]
+                
+                self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=1, header =  None)
+                if self.info.loc[0,0] == 'Power Measurment Type':
+                    self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=7, header =  None)
+                    self.laserPowerType = self.info.loc[0,1]   
+                    self.laserPower = self.info.loc[1,1]
+                    self.deviceType = self.info.loc[2,1]
+                    self.deviceRow = self.info.loc[3,1]
+                    self.deviceCol = self.info.loc[4,1]
+                    self.deviceWid = self.info.loc[5,1]
+                    self.date = self.info.loc[6,1]
+                else:
+                    self.info = pd.read_table((os.path.join(self.path,i)), delimiter = ':', nrows=5, header =  None)
+                    self.laserPowerType = 0
+                    self.laserPower = 0                 
+                    self.deviceType = self.info.loc[0,1]
+                    self.deviceRow = self.info.loc[1,1]
+                    self.deviceCol = self.info.loc[2,1]
+                    self.deviceWid = self.info.loc[3,1]
+                    self.date = self.info.loc[4,1]                
 #        self.imagePath = os.path.join("Z:\Group\Projects\FIBed Graphene Drumhead Resonators\Images\Device_Images", self.deviceRow +'_'+ self.deviceCol)
         self.fits={}
         self.fig=Figure()
@@ -51,8 +64,8 @@ class xyData():
         y0=ip[1]
         sigma=ip[2]
         out, params=lpf.lmDDOFit(self.data['f'][xi:xf+1],self.data['r'][xi:xf+1],[x0,2*sigma*y0,sigma])               
-        print lmfit.report_fit(out)     
-        return out, params
+        outp, paramsp, fout = lpf.fitPhaseFromAmp(self.data.th,self.data.f, params[0],params[3])
+        return out, params,outp, paramsp, fout
 
     def storeLorFit(self, out, xi, xf, params, omega):
 #Stores a lorentzian fit in a dictionary of fitted values. out is the fit, xi

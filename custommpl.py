@@ -159,15 +159,16 @@ class Main(QMainWindow, Ui_MainWindow):
         print xi,xf, [x0,y0,sigma]
         ip=[x0,y0,sigma]
         print self.activeDataSet
-        out, params = self.activeDataSet.fitDataSelection(xi,xf,ip)
+        out, params, outp, self.paramsp, dout = self.activeDataSet.fitDataSelection(xi,xf,ip)
         self.outfit=out
         self.currpars=params
         self.fitfig=Figure()
         ax=self.fitfig.add_subplot(1,1,1)
+        axt=ax.twinx()
         ax.plot(self.activeDataSet.data.f[xi:xf+1], out.best_fit)
-#
+        axt.plot(dout[0], outp.best_fit, 'g')
         ax.plot(self.activeDataSet.data.f[xi:xf+1], self.activeDataSet.data.r[xi:xf+1], 'ro')
-#        ax.plot(self.activeDataSet.data.f[xi:xf+1], self.activeDataSet.data.th[xi:xf+1], 'ro')
+        axt.plot(dout[0], dout[1], 'go')
         idx=min(range(len(self.activeDataSet.data.f)), key=lambda x: abs(self.activeDataSet.data.f[x]-params[0]))
         ax.annotate('Q = '+ str(params[3]) + '\n' + 'w_0 = '+ str(params[0]), xy=(params[0],self.activeDataSet.data.r[idx]), textcoords = 'data', xycoords='data')
         self.rmmpl()
@@ -224,7 +225,7 @@ class Main(QMainWindow, Ui_MainWindow):
                 self.widthEdit.text(), 'Mode Order' : self.fNumber.value(), \
                 'Mode Type': self.degeneracySelect.currentText(), 'Frequency' : self.w0, 'Amplitude' : self.A, \
                 'Q' : self.Q, 'Bad Fit' : self.selectBadFit.checkState(), 'Power Measurement Type' : self.powerType.text(), 'Power (uW)' : self.powerValue.text(),\
-                'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date, 'Intercept': self.lineInt, 'Slope':self.lineSlope}, index=[idx] )
+                'Fit Notes' : self.fitNotes.text(), 'Date' : self.activeDataSet.date, 'Intercept': self.lineInt, 'Slope':self.lineSlope, 'w0p': self.paramsp[0],'Qp': self.paramsp[1],'pm': self.paramsp[2],'pb': self.paramsp[3]}, index=[idx] )
         print df
         return df
     def onCancelFit(self,):
