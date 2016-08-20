@@ -6,7 +6,7 @@ Created on Fri Feb 19 17:21:56 2016
 """
 from PyQt4.uic import loadUiType
 import os
-from dataClass import *
+from dataClassRudy import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -38,7 +38,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.widthEdit.setText(str(0))
         self.powerType.setText(str(0))
         self.powerValue.setText(str(0))
-        self.QEntry.setText(str(100))
+        self.QEntry.setText(str(20000))
         self.fNumber.setValue(1)
         self.degeneracySelect.setCurrentIndex(0)
         fig = Figure()
@@ -68,9 +68,8 @@ class Main(QMainWindow, Ui_MainWindow):
         folderName=self.fileDialog.getExistingDirectory(self,
         "Choose a folder", homedir, QtGui.QFileDialog.ShowDirsOnly)
         for i in os.listdir(folderName):
-            for ii in os.listdir(os.path.join(folderName,i)):
-                if ii[-4:] == ".csv":            
-                    self.adddata(i, xyData(os.path.join(folderName,i)))        
+            if i[-4:] == ".txt":            
+                self.adddata(i, xyData(os.path.join(folderName,i)))        
                                     
     def changefig(self, ):
         item=self.mplfigs.currentItem()
